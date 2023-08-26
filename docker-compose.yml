@@ -34,7 +34,7 @@ services:
     image: mysql:8.0
     env_file:
       - ./slave/mysql_slave.env
-    container_name: "mysql_slave"
+    container_name: "mysql_slave2"
     restart: "no"
     ports:
       - 5506:3306
