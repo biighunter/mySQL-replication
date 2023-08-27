@@ -11,6 +11,13 @@ services:
     volumes:
       - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
       - ./master/data:/var/lib/mysql
+    command: 
+      --default-authentication-plugin=mysql_native_password
+      --sql_mode=NO_ENGINE_SUBSTITUTION
+    cap_add:
+      - all
+    expose:
+      - '3306'
     networks:
       - overlay
 
@@ -22,11 +29,20 @@ services:
     restart: "no"
     ports:
       - 5506:3306
+    expose:
+      - 5506
     depends_on:
       - mysql_master
     volumes:
       - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
       - ./slave/data:/var/lib/mysql
+    command: 
+      --default-authentication-plugin=mysql_native_password
+      --sql_mode=NO_ENGINE_SUBSTITUTION
+      --log-bin=mysql-bin
+      --server-id=2
+    cap_add:
+      - all
     networks:
       - overlay
 
