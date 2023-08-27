@@ -7,6 +7,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 1122
       MYSQL_DATABASE: mydb
+      MYSQL_LOG_BIN: mysql-bin
+      MYSQL_SERVER_ID: 1
     ports:
       - "3306:3306"
     networks:
@@ -19,6 +21,8 @@ services:
     container_name: mysql_slave
     environment:
       MYSQL_ROOT_PASSWORD: 1122
+      MYSQL_LOG_BIN: mysql-bin
+      MYSQL_SERVER_ID: 2
     networks:
       - mysql_network
     volumes:
