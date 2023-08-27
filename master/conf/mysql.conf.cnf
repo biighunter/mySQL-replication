@@ -3,7 +3,13 @@
 # skip-name-resolve
 # default_authentication_plugin = mysql_native_password
 # bind-address = 127.0.0.1
-server-id = 1
-log_bin = 1
-binlog_format = ROW
+# server-id = 1
+# log_bin = 1
+# binlog_format = ROW
 # binlog_do_db = mydb
+skip-host-cache
+skip-name-resolve
+server-id = 11
+log_bin = mysql-bin
+binlog_format = mixed
+binlog_do_db = mydb
