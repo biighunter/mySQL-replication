@@ -5,6 +5,10 @@ services:
     env_file:
       - ./master/mysql_master.env
     container_name: "mysql_master"
+    deploy:
+      resources:
+        limits:
+          memory: 512MB
     restart: "no"
     ports:
       - 4406:3306
@@ -19,6 +23,10 @@ services:
     env_file:
       - ./slave/mysql_slave.env
     container_name: "mysql_slave"
+    deploy:
+      resources:
+        limits:
+          memory: 512MB
     restart: "no"
     ports:
       - 5506:3306
