@@ -1,78 +1,78 @@
-Docker MySQL master-slave replication 
-========================
+# Introduction
 
-MySQL 8.0 master-slave replication with using Docker. 
+This is a sample work to learn about docker, containers, running MySQL in docker and setting up MySQL
+replication using docker containers.
 
-Previous version based on MySQL 5.7 is available in [mysql5.7](https://github.com/vbabak/docker-mysql-master-slave/tree/mysql5.7) branch.
+# Directory structure explained
+Here is the directory structure and its explanation
 
-## Run
+    MySQLReplDocker
+        |
+        +--- conf/
+        |       +--- master1.cnf
+        |       +--- master2.cnf
+        |       +--- slave1.cnf
+        |       +--- slave2.cnf
+        +--- data/
+        |       +--- master1/
+        |       +--- master2/
+        |       +--- slave1/
+        |       +--- slave2/
+        +--- docker/
+        |       +--- master-2-slave.yml
+        |       +--- master-2-master.yml
+        |       +--- slave-2-master-2-master-2-slave.yml
+        +--- scripts/
+        |       +--- common-functions.sh
+        |       +--- master-2-slave.sh
+        |       +--- master-2-master.sh
+        |       +--- slave-2-master-2-master-2-slave.sh
+        +--- start
+        +--- stop
+        +--- check_params.sh
 
-To run this examples you will need to start containers with "docker-compose" 
-and after starting setup replication. See commands inside ./build.sh. 
 
-#### Create 2 MySQL containers with master-slave row-based replication 
+* The folder "___conf___" contains the MySQL configuration for master and slave nodes.
+* The folder "___data___" contains folders to hold data for master and slave nodes.
+* The folder "___docker___" contains the docker container configuation files
+* The folder "___scripts___" contains bash script which does the real job of setup of replication between the nodes
 
-```bash
-./build.sh
+# How to get MySQL containers up and running
+To run a MySQL master-slave container replication execute the command
+```sh
+bash start master-slave
+```
+To run a MySQL master-master container replication execute the command
+```sh
+bash start master-master
+```
+To run a MySQL slave-master-master-slave replication execute the command
+```sh
+bash start slave-master-master-slave
 ```
 
-#### Make changes to master
-
-```bash
-docker exec mysql_master sh -c "export MYSQL_PWD=111; mysql -u root mydb -e 'create table code(code int); insert into code values (100), (200)'"
+# Seeing replication in action
+In order to see if the replication is actually working, you need to enable our nerd mode. Lets kick in. Execute the following command to see the docker containers which are currently running
+```sh
+bash info master-slave
 ```
-
-#### Read changes from slave
-
-```bash
-docker exec mysql_slave sh -c "export MYSQL_PWD=111; mysql -u root mydb -e 'select * from code \G'"
+This will list down the containers, where you can clearly identify the MySQL master(s) and slave(s) nodes. In order to connect to any of the container, you can execute
+```sh
+docker container exec -it <name-of-container> mysql -u root -p <mysql-password>
 ```
+> The name of the container is the first column from the output of info command. Once you are inside the prompt you can execute either of the following commands
+>
+> SHOW MASTER STATUS
+>
+> SHOW SLAVE STATUS\G
+>
+> NOTE: Find the passwords in .env file
 
-## Troubleshooting
+You can repeat the command for all the MySQL containers and then play around and see the replication action coming live.
 
-#### Check Logs
+In case you are not comfortable using command line for interacting with MySQL, this repo also has support for phpMyAdmin.
+You can access phpMyAdmin over the port 8080
 
-```bash
-docker-compose logs
-```
-
-#### Start containers in "normal" mode
-
-> Go through "build.sh" and run command step-by-step.
-
-#### Check running containers
-
-```bash
-docker-compose ps
-```
-
-#### Clean data dir
-
-```bash
-rm -rf ./master/data/*
-rm -rf ./slave/data/*
-```
-
-#### Run command inside "mysql_master"
-
-```bash
-docker exec mysql_master sh -c 'mysql -u root -p111 -e "SHOW MASTER STATUS \G"'
-```
-
-#### Run command inside "mysql_slave"
-
-```bash
-docker exec mysql_slave sh -c 'mysql -u root -p111 -e "SHOW SLAVE STATUS \G"'
-```
-
-#### Enter into "mysql_master"
-
-```bash
-docker exec -it mysql_master bash
-```
-
-#### Enter into "mysql_slave"
-
-```bash
-docker exec -it mysql_slave bash
-```
+> Access http://localhost:8080 in your favorite browser
+>
+> For hostname, username, and password refer to the .env file
