@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  master:
+    image: mysql:5.7
+    container_name: mysql_master
+    environment:
+      MYSQL_ROOT_PASSWORD: 1122
+      MYSQL_DATABASE: mydb
+    ports:
+      - "3306:3306"
+    networks:
+      - mysql_network
+    volumes:
+      - master_data:/var/lib/mysql
+
+  slave:
+    image: mysql:5.7
+    container_name: mysql_slave
+    environment:
+      MYSQL_ROOT_PASSWORD: 1122
+    networks:
+      - mysql_network
+    volumes:
+      - slave_data:/var/lib/mysql
+    command: ["--slave-skip-errors=1062"]
+    depends_on:
+      - master
+
+networks:
+  mysql_network:
+
+volumes:
+  master_data:
+  slave_data:
