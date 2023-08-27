@@ -55,7 +55,7 @@ services:
     replication:
         image: ubuntu:18.04
         volumes:
-            - ../scripts:${REPL_SCRIPT_MOUNT_PATH}
+            - ./scripts:${REPL_SCRIPT_MOUNT_PATH}
         networks:
             - replication_network
         environment:
