@@ -1,51 +1,47 @@
-version: '3'
+version: '3.4'
+
+x-mysql: &mysql
+  environment:
+    MYSQL_ALLOW_EMPTY_PASSWORD: true
+  command: >
+    mysqld
+    --log-bin=mysql-bin.log
+    --server-id 1
+    --binlog-format=row
+    --gtid_mode=on
+    --enforce-gtid-consistency=on
+
+x-mariadb: &mariadb
+  environment:
+    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+  command: >
+    --log-bin=master-bin
+    --server-id=1
+    --default-authentication-plugin=mysql_native_password
+    --binlog-format=row
+
 services:
-  mysql_master:
-    image: mysql:latest
-    env_file:
-      - ./master/mysql_master.env
-    container_name: "mysql_master"
-    restart: "no"
+  percona-5.7:
+    <<: *mysql
+    image: percona:5.7
     ports:
-      - 4406:3306
-    volumes:
-      - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./master/data:/var/lib/mysql
-    command: 
-      --default-authentication-plugin=mysql_native_password
-      --sql_mode=NO_ENGINE_SUBSTITUTION
-    cap_add:
-      - all
-    expose:
-      - '3306'
-    networks:
-      - overlay
+      - "3306:3306"
 
-  mysql_slave:
-    image: mysql:latest
-    env_file:
-      - ./slave/mysql_slave.env
-    container_name: "mysql_slave"
-    restart: "no"
+  percona-5.7-ctl:
+    <<: *mysql
+    image: percona:5.7
     ports:
-      - 5506:3306
-    expose:
-      - 5506
-    depends_on:
-      - mysql_master
+      - "3307:3306"
+
+  mariadb-10.6:
+    <<: *mariadb
+    image: mariadb:10.6
+    ports:
+      - "3308:3306"
     volumes:
-      - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./slave/data:/var/lib/mysql
-    command: 
-      --default-authentication-plugin=mysql_native_password
-      --sql_mode=NO_ENGINE_SUBSTITUTION
-      --log-bin=mysql-bin
-      --server-id=2
-    cap_add:
-      - all
-    networks:
-      - overlay
-
-networks:
-  overlay:
-
+      - type: bind
+        source: ./.mariadb
+        target: /opt/key_file
+      - type: bind
+        source: ./.mariadb/my.cnf
+        target: /etc/mysql/my.cnf
