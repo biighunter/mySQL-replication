@@ -1,0 +1,22 @@
+[mysqld]
+server-id            = 101
+bind-address         = slave_1
+log-error            = /var/lib/mysql/mysql.err
+log-bin              = /var/lib/mysql/mysql-bin
+relay-log            = /var/lib/mysql/mysql-relay-bin
+relay-log-index      = /var/lib/mysql/mysql-relay-bin.index
+relay-log-info-file  = /var/lib/mysql/mysql-relay-log.info
+master-info-file     = /var/lib/mysql/mysql-master.info
+
+gtid_mode            = ON
+enforce-gtid-consistency
+skip-name-resolve
+
+# [mysqld]
+
+# skip-name-resolve
+# default_authentication_plugin = mysql_native_password
+
+# server-id = 2
+# log_bin = 1
+# binlog_do_db = mydb
