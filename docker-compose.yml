@@ -37,7 +37,7 @@ services:
     container_name: "mysql_slave2"
     restart: "no"
     ports:
-      - 6606:3306
+      - 5507:3306
     depends_on:
       - mysql_master
     volumes:
