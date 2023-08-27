@@ -54,8 +54,8 @@ services:
                 ipv4_address: ${SLAVE_2_HOST_IP}
     replication:
         image: ubuntu:18.04
-        volumes:
-            - ../scripts/*:${REPL_SCRIPT_MOUNT_PATH}
+        # volumes:
+        #     - ../scripts:${REPL_SCRIPT_MOUNT_PATH}
         networks:
             - replication_network
         environment:
