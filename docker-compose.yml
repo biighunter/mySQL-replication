@@ -6,6 +6,10 @@ services:
     container_name: orchestrator
     ports:
       - "3000:3000"
+    deploy:
+      resources:
+        limits:
+          memory: 64MG
     networks:
       - orchnet
 
@@ -19,7 +23,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1GB
+          memory: 512MB
     networks:
       - orchnet
 
@@ -33,7 +37,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1GB
+          memory: 512MB
     networks:
       - orchnet
 
