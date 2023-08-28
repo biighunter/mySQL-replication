@@ -1,9 +1,0 @@
-[mysqld]
-
-skip-name-resolve
-default_authentication_plugin = mysql_native_password
-bind-address = mysql_master
-server-id = 1
-log_bin = 1
-binlog_format = ROW/FULL
-binlog_do_db = mydb

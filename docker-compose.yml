@@ -1,35 +1,44 @@
 version: '3'
-services:
-  mysql_master:
-    image: mysql:8.0
-    env_file:
-      - ./master/mysql_master.env
-    container_name: "mysql_master"
-    restart: "no"
-    ports:
-      - 4406:3306
-    volumes:
-      - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./master/data:/var/lib/mysql
-    networks:
-      - overlay
 
-  mysql_slave:
-    image: mysql:8.0
-    env_file:
-      - ./slave/mysql_slave.env
-    container_name: "mysql_slave"
-    restart: "no"
+services:
+  orchest:
+    image: orchestrator:latest
+    container_name: orchestrator
     ports:
-      - 5506:3306
-    depends_on:
-      - mysql_master
-    volumes:
-      - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./slave/data:/var/lib/mysql
+      - "3000:3000"
     networks:
-      - overlay
+      - orchnet
+
+  mysql_node1:
+    image: mysql/mysql-server:8.0
+    container_name: node1
+    hostname: node1
+    environment:
+      MYSQL_ROOT_PASSWORD: 1122
+    command: --server-id=1 --enforce-gtid-consistency=ON --log-slave-updates=ON --gtid-mode=ON --log-bin=mysql-bin-1.log
+    networks:
+      - orchnet
+
+  mysql_node2:
+    image: mysql/mysql-server:8.0
+    container_name: node2
+    hostname: node2
+    environment:
+      MYSQL_ROOT_PASSWORD: 1122
+    command: --server-id=2 --enforce-gtid-consistency=ON --log-slave-updates=ON --gtid-mode=ON --log-bin=mysql-bin-1.log
+    networks:
+      - orchnet
+
+  mysql_node3:
+    image: mysql/mysql-server:8.0
+    container_name: node3
+    hostname: node3
+    environment:
+      MYSQL_ROOT_PASSWORD: 1122
+    command: --server-id=3 --enforce-gtid-consistency=ON --log-slave-updates=ON --gtid-mode=ON --log-bin=mysql-bin-1.log
+    networks:
+      - orchnet
 
 networks:
-  overlay:
+  orchnet:
 
