@@ -1,41 +1,35 @@
-version: '3.8'
-
+version: '3'
 services:
-  master:
-    image: mysql:5.7
-    container_name: mysql_master
-    environment:
-      MYSQL_ROOT_PASSWORD: 1122
-      MYSQL_DATABASE: mydb
-      MYSQL_LOG_BIN: mysql-bin
-      MYSQL_SERVER_ID: 1
-      MYSQL_BIND_ADDRESS: master
+  mysql_master:
+    image: mysql:8.0
+    env_file:
+      - ./master/mysql_master.env
+    container_name: "mysql_master"
+    restart: "no"
     ports:
-      - "3306:3306"
-    networks:
-      - mysql_network
+      - 4406:3306
     volumes:
-      - master_data:/var/lib/mysql
+      - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
+      - ./master/data:/var/lib/mysql
+    networks:
+      - overlay
 
-  slave:
-    image: mysql:5.7
-    container_name: mysql_slave
-    environment:
-      MYSQL_ROOT_PASSWORD: 1122
-      MYSQL_LOG_BIN: mysql-bin
-      MYSQL_SERVER_ID: 2
-      MYSQL_BIND_ADDRESS: slave
-    networks:
-      - mysql_network
-    volumes:
-      - slave_data:/var/lib/mysql
-    command: ["--slave-skip-errors=1062"]
+  mysql_slave:
+    image: mysql:8.0
+    env_file:
+      - ./slave/mysql_slave.env
+    container_name: "mysql_slave"
+    restart: "no"
+    ports:
+      - 5506:3306
     depends_on:
-      - master
+      - mysql_master
+    volumes:
+      - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
+      - ./slave/data:/var/lib/mysql
+    networks:
+      - overlay
 
 networks:
-  mysql_network:
+  overlay:
 
-volumes:
-  master_data:
-  slave_data:
