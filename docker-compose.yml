@@ -9,7 +9,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 64MG
+          memory: 64MB
     networks:
       - orchnet
 
