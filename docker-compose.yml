@@ -9,6 +9,7 @@ services:
       MYSQL_DATABASE: mydb
       MYSQL_LOG_BIN: mysql-bin
       MYSQL_SERVER_ID: 1
+      MYSQL_BIND_ADDRESS: master
     ports:
       - "3306:3306"
     networks:
@@ -23,6 +24,7 @@ services:
       MYSQL_ROOT_PASSWORD: 1122
       MYSQL_LOG_BIN: mysql-bin
       MYSQL_SERVER_ID: 2
+      MYSQL_BIND_ADDRESS: slave
     networks:
       - mysql_network
     volumes:
