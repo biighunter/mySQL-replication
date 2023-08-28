@@ -19,7 +19,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512MB
+          memory: 256MB
     networks:
       - orchnet
 
@@ -33,7 +33,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512MB
+          memory: 256MB
     networks:
       - orchnet
 
