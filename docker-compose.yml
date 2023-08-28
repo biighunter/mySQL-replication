@@ -27,19 +27,19 @@ services:
     networks:
       - orchnet
 
-  mysql_node2:
-    image: mysql/mysql-server:8.0
-    container_name: node2
-    hostname: node2
-    environment:
-      MYSQL_ROOT_PASSWORD: 1122
-    command: --server-id=2 --enforce-gtid-consistency=ON --log-slave-updates=ON --gtid-mode=ON --log-bin=mysql-bin-1.log
-    deploy:
-      resources:
-        limits:
-          memory: 512MB
-    networks:
-      - orchnet
+  # mysql_node2:
+  #   image: mysql/mysql-server:8.0
+  #   container_name: node2
+  #   hostname: node2
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 1122
+  #   command: --server-id=2 --enforce-gtid-consistency=ON --log-slave-updates=ON --gtid-mode=ON --log-bin=mysql-bin-1.log
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 512MB
+  #   networks:
+  #     - orchnet
 
   # mysql_node3:
   #   image: mysql/mysql-server:8.0
