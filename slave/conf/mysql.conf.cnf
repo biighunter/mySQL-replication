@@ -1,6 +1,7 @@
 [mysqld]
 
 skip-name-resolve
+default_authentication_plugin = mysql_native_password
 authentication_policy = MEDIUM
 bind-address = mysql_slave
 host_cache_size = 0
