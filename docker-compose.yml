@@ -37,15 +37,15 @@ services:
     networks:
       - orchnet
 
-  mysql_node3:
-    image: mysql/mysql-server:8.0
-    container_name: node3
-    hostname: node3
-    environment:
-      MYSQL_ROOT_PASSWORD: 1122
-    command: --server-id=3 --enforce-gtid-consistency=ON --log-slave-updates=ON --gtid-mode=ON --log-bin=mysql-bin-1.log
-    networks:
-      - orchnet
+  # mysql_node3:
+  #   image: mysql/mysql-server:8.0
+  #   container_name: node3
+  #   hostname: node3
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 1122
+  #   command: --server-id=3 --enforce-gtid-consistency=ON --log-slave-updates=ON --gtid-mode=ON --log-bin=mysql-bin-1.log
+  #   networks:
+  #     - orchnet
 
 networks:
   orchnet:
